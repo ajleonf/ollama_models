@@ -1,0 +1,11 @@
+ollama list
+ - Lista todos los modelos cargados en ollama
+
+ollama run nombre_modelo ej: ollama run gemma3:27b
+ - Este comando sirve para instalar un modelo concreto que esté disponible en (https://ollama.com/search) o activa un modelo en el cmd
+
+ollama create nombre_modelo -f modelfile
+ - Esto nos permite crear un modelo parametrizado y personalizado para una tarea concreta. Es necesario crear un archivo modelfile (añadir path en esta variable o ejecutarlo en la carpeta que contiene el modelfile)
+
+ollama rm nombre_modelo
+ - Elimina el modelo indicado
