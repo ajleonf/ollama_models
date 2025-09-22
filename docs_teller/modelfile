@@ -1,0 +1,78 @@
+FROM gemma3:12b 
+
+# Instruction Tuning (ajuste fino con instrucciones)
+
+SYSTEM """
+Eres un experto lector y analizador de textos. Resumes y extraes información clave de documentos largos.
+Respondes de forma clara, concisa y precisa. Si no sabes la respuesta, di "Esa información no aparece en el texto".
+Utiliza un lenguaje formal y profesional. Evita jergas y coloquialismos.
+No inventes información. Basa tus respuestas únicamente en el contenido proporcionado.
+Uiliza siempre el lenguaje español de España para tus respuestas.
+"""
+
+# Parameters (parámetros del modelo)
+
+# Más bajo para respuestas más deterministas y concisas. 0.0 – 1.0 (algunos modelos aceptan hasta 2.0
+PARAMETER temperature 0.5
+# Similar a temperature, controla la aleatoriedad. 0.0 – 1.0
+PARAMETER top_p 0.3
+# Controla la diversidad de las respuestas. 1 – 1000 (por defecto muchos usan 40).       
+PARAMETER top_k 40
+# Evita que el modelo se repita. 0.0 – 2.0 (típico 1.0 – 1.2)
+PARAMETER repeat_penalty 0.6
+# Limita la longitud de las respuestas para mantener la brevedad.
+PARAMETER num_ctx 2000     
+
+# 🔹 temperature (0.0 – 1.0 * 2.0)
+
+# Controla la aleatoriedad de la salida.
+
+# 0.2 → muy determinista: siempre da casi la misma respuesta.
+
+# Ej: Preguntas “¿qué es Python?” → siempre responde parecido.
+
+# 1.0 → balanceado.
+
+# 1.5 → creativo pero con riesgo de inventar cosas.
+
+# 🔹 top_p (0.0 – 1.0)
+
+# Hace “nucleus sampling”: el modelo solo considera el subconjunto de palabras más probables hasta que suman p.
+
+# 0.1 → usa solo las palabras más seguras.
+
+# Ej: Respuesta directa, sin adornos.
+
+# 1.0 → no filtra nada → más variabilidad.
+
+# 🔹 top_k (1 – 1000)
+
+# Número de palabras candidatas que se consideran en cada paso.
+
+# top_k=10 → elige entre 10 palabras más probables.
+
+# Ej: respuestas más simples y repetitivas.
+
+# top_k=200 → más opciones, frases más variadas.
+
+# 🔹 repeat_penalty (0.0 – 2.0)
+
+# Penaliza que el modelo repita tokens ya usados.
+
+# 1.0 → neutral.
+
+# 1.2 → evita repeticiones.
+
+# Ej: en vez de repetir “muy muy muy bueno”, lo cambia a “excelente, estupendo”.
+
+# <1 → puede fomentar repeticiones (no recomendable).
+
+# 🔹 num_ctx (máx según modelo, p. ej. 8192 en gemma:27b)
+
+# Límite de tokens en memoria (ventana de contexto).
+
+# 256 → solo tiene en cuenta lo último (respuestas cortas y baratas).
+
+# 4096 → recuerda más conversación/documentos.
+
+# Si superas el límite → el modelo “olvida” lo primero.
